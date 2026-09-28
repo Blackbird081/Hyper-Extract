@@ -72,8 +72,19 @@ def template(
     if include_methods:
         from hyperextract.methods import list_method_cfgs
 
-        method_templates = list_method_cfgs()
-        for name, cfg in method_templates.items():
+        # --query/--autotype apply to method rows too, with the same matching
+        # rules Gallery.list uses for presets.
+        query_lower = query.lower() if query else None
+        for name, cfg in list_method_cfgs().items():
+            description = cfg.description or ""
+            if autotype and cfg.type != autotype:
+                continue
+            if (
+                query_lower
+                and query_lower not in name.lower()
+                and query_lower not in description.lower()
+            ):
+                continue
             templates.append((name, cfg.type, cfg.description))
 
     if not templates:
