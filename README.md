@@ -354,7 +354,7 @@ identifiers:
 
 ## 📰 What's New
 
-**v0.10.4** — 👁️ Chunk extraction failures are now visible (`ka.extraction_failures`, optional `on_error="raise"`) · 🐛 Hypergraph incremental feed no longer crashes.
+**v0.10.5** — 🛡️ Load-time template validation (undeclared identifier fields fail at create, not at merge) · 🧠 Native Gemini · 🔒 ontomem 0.6.1 safe merging.
 
 📰 **[Full release notes](https://yifanfeng97.github.io/Hyper-Extract/latest/news/)** · [All releases](https://github.com/yifanfeng97/hyper-extract/releases)
 

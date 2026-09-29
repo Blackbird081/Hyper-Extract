@@ -354,7 +354,7 @@ identifiers:
 
 ## 📰 最新动态
 
-**v0.10.4** — 👁️ Chunk 抽取失败可见化（`ka.extraction_failures`，可选 `on_error="raise"`）· 🐛 超图增量喂入不再崩溃。
+**v0.10.5** — 🛡️ 加载期模板校验（未声明字段在 create 阶段即报错）· 🧠 原生 Gemini · 🔒 ontomem 0.6.1 安全合并。
 
 📰 **[完整版本说明](https://yifanfeng97.github.io/Hyper-Extract/latest/zh/news/)** · [全部 Releases](https://github.com/yifanfeng97/hyper-extract/releases)
 

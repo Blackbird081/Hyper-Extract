@@ -82,6 +82,85 @@ def _members_extractor(
     return extractor
 
 
+def _placeholders(field_or_template: str) -> list[str]:
+    """Bracket placeholders of a template (simple field -> [itself])."""
+    if "{" in field_or_template:
+        return re.findall(r"\{(\w+)\}", field_or_template)
+    return [field_or_template]
+
+
+def validate_identifiers_fields(
+    identifiers: NaiveIdentifierSchema | GraphIdentifiersSchema,
+    autotype: VALID_AUTOTYPES,
+    declared_fields: dict[str, set[str]],
+) -> None:
+    """Load-time check: identifiers must reference declared output fields.
+
+    A template whose ``relation_id`` cites ``{type}`` while
+    ``relations.fields`` never declares ``type`` previously loaded fine and
+    crashed at first merge with an unrelated ``max()`` error (every key
+    extraction failed). This check fails at ``Template.create`` instead.
+
+    Args:
+        identifiers: identifiers config from YAML.
+        autotype: auto type of the template.
+        declared_fields: declared output field names, keyed by
+            ``"entities"`` / ``"relations"``.
+
+    Raises:
+        ValueError: naming each referenced-but-undeclared field.
+    """
+    if autotype == "set":
+        return
+    if autotype not in (
+        "graph",
+        "hypergraph",
+        "temporal_graph",
+        "spatial_graph",
+        "spatio_temporal_graph",
+    ):
+        return
+
+    entity_fields = declared_fields.get("entities", set())
+    relation_fields = declared_fields.get("relations", set())
+
+    problems: list[str] = []
+    for field in _placeholders(identifiers.entity_id):
+        if field not in entity_fields:
+            problems.append(
+                f"node_id references '{{{field}}}' but "
+                f"entities.fields does not declare '{field}'"
+            )
+    for field in _placeholders(identifiers.relation_id):
+        if field not in relation_fields:
+            problems.append(
+                f"relation_id references '{{{field}}}' but "
+                f"relations.fields does not declare '{field}'"
+            )
+    if isinstance(identifiers.relation_members, dict):
+        for role, field in identifiers.relation_members.items():
+            if field not in relation_fields:
+                problems.append(
+                    f"relation_members['{role}'] references '{{{field}}}' but "
+                    f"relations.fields does not declare '{field}'"
+                )
+    for attr, section in (
+        ("time_field", "entities"),
+        ("location_field", "entities"),
+    ):
+        value = getattr(identifiers, attr, None)
+        if value:
+            for field in _placeholders(value):
+                if field not in entity_fields:
+                    problems.append(
+                        f"{attr} references '{{{field}}}' but "
+                        f"entities.fields does not declare '{field}'"
+                    )
+
+    if problems:
+        raise ValueError("; ".join(problems))
+
+
 def parse_identifiers(
     identifiers: NaiveIdentifierSchema | GraphIdentifiersSchema,
     autotype: VALID_AUTOTYPES,

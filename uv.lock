@@ -977,7 +977,7 @@ wheels = [
 
 [[package]]
 name = "hyperextract"
-version = "0.10.4"
+version = "0.10.5"
 source = { editable = "." }
 dependencies = [
     { name = "faiss-cpu" },
@@ -1037,7 +1037,7 @@ requires-dist = [
     { name = "langchain-openai", specifier = ">=1.1.7" },
     { name = "markitdown", extras = ["pdf", "docx", "pptx", "xlsx"], marker = "extra == 'ingest'", specifier = ">=0.1.4" },
     { name = "mcp", marker = "extra == 'mcp'", specifier = ">=1.2.0,<3" },
-    { name = "ontomem", specifier = ">=0.6.0" },
+    { name = "ontomem", specifier = ">=0.6.1" },
     { name = "ontosight", specifier = ">=0.1.8" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "rich", specifier = ">=13.7.0" },
@@ -2209,7 +2209,7 @@ wheels = [
 
 [[package]]
 name = "ontomem"
-version = "0.6.0"
+version = "0.6.1"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" }
 dependencies = [
     { name = "faiss-cpu" },
@@ -2221,9 +2221,9 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "structlog" },
 ]
-sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/b1/f8/b730a2070cad15d1ee0947d5f3e5d1e5d0780903d1668f51b93a88439867/ontomem-0.6.0.tar.gz", hash = "sha256:3c25b0c2ef050f477af5eecc3893a2071399007676ff52a8b909e4da6850b9c2", size = 2550918, upload-time = "2026-09-04T11:35:21.421Z" }
+sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ae/36/9ebddb5d165ba9fee6e7e54b98010c84fbbd75604f73b3a8143402f1f507/ontomem-0.6.1.tar.gz", hash = "sha256:5d5d96c5e392a52f76952cad84cd3ed45b2bd014aac07e775652f0f96d0a18ae", size = 2554899, upload-time = "2026-09-29T13:23:33.99Z" }
 wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/58/47/8c1074a571882b0380bd089f633b0e7d5e4cdeefd402791b9e62afe811ce/ontomem-0.6.0-py3-none-any.whl", hash = "sha256:6733e8780179b59b282bfabe317f63deeaf8853a963cf546c4722db8e4177a25", size = 47563, upload-time = "2026-09-04T11:35:19.508Z" },
+    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/c4/08/d9a4995b5225a444960804bcdfd90d68e11dd827bf6cfdf9b5d8d3203c38/ontomem-0.6.1-py3-none-any.whl", hash = "sha256:680493c62d495e2ce6d18c61c30529fa086bb849a2fa61fe3290aab0366e53d4", size = 49557, upload-time = "2026-09-29T13:23:32.268Z" },
 ]
 
 [[package]]

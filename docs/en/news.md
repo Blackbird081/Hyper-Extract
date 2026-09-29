@@ -4,6 +4,14 @@ Release notes and highlights. For a complete changelog, see the [GitHub releases
 
 ---
 
+## v0.10.5 — Load-Time Template Validation & Friendly Local-Model Errors
+
+- **🛡️ Load-time identifiers validation** — a template whose `node_id`/`relation_id`/`relation_members` reference fields not declared in `output` now fails at `Template.create` with `relation_id references '{type}' but relations.fields does not declare 'type'`, instead of crashing at first merge with an unrelated `max()` error. *(production feedback; requires ontomem ≥ 0.6.1)*
+- **🧠 Friendly local-model errors** — without a config file, `Template.create` no longer silently falls back to OpenAI defaults; the error lists the three ways forward (`he config init`, `-p vllm` local setup, explicit clients).
+- **ontomem 0.6.1** — exact-rollback safety: `KeyExtractionError` on 100% key-extraction failure, aggregated `key_extraction_failed` warnings, and `remerge="mechanical"` for deterministic (LLM-free, seconds-fast) rollbacks on large shared keys. *(production feedback)*
+
+---
+
 ## v0.10.4 — Visible Chunk Failures & Hypergraph Incremental Feed
 
 - **🐛 Hypergraph incremental feed fixed** — feeding a second document into an existing hypergraph KA crashed with `AttributeError: 'key_extractor'` (`_update_data_state` referenced a nonexistent attribute). Now uses `node_key_extractor`/`edge_key_extractor`.

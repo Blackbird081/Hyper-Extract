@@ -4,6 +4,14 @@
 
 ---
 
+## v0.10.5 — 加载期模板校验与本地模型友好报错
+
+- **🛡️ 加载期 identifiers 校验** — 模板的 `node_id`/`relation_id`/`relation_members` 引用了 `output` 未声明字段时，`Template.create` 阶段即报 `relation_id references '{type}' but relations.fields does not declare 'type'`，而非首次合并时崩出无关的 `max()` 错误。*(生产反馈；需要 ontomem ≥ 0.6.1)*
+- **🧠 本地模型友好报错** — 无配置文件时 `Template.create` 不再静默回退到 OpenAI 默认值，报错列出三条出路（`he config init`、`-p vllm` 本地方案、显式传客户端）。
+- **ontomem 0.6.1** — 精确回滚安全：100% key 抽取失败时抛 `KeyExtractionError`、`key_extraction_failed` 警告聚合计数、`remerge="mechanical"` 大共享键确定性回滚（无 LLM、秒级）。*(生产反馈)*
+
+---
+
 ## v0.10.4 — Chunk 失败可见化与超图增量喂入修复
 
 - **🐛 超图增量喂入修复** — 向已有超图 KA 喂第二个文档时崩溃（`_update_data_state` 引用了不存在的 `key_extractor` 属性）。现改用 `node_key_extractor`/`edge_key_extractor`。

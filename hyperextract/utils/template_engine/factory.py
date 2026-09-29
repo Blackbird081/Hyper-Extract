@@ -20,6 +20,7 @@ from .parsers import (
     parse_option,
     parse_output,
 )
+from .parsers.identifiers import validate_identifiers_fields
 from .parsers.schemas.base import VALID_AUTOTYPES
 
 if TYPE_CHECKING:
@@ -39,6 +40,17 @@ if TYPE_CHECKING:
 def _unknown_autotype_error(type_name: str) -> ValueError:
     allowed = ", ".join(get_args(VALID_AUTOTYPES))
     return ValueError(f"Unknown template type {type_name!r}. Allowed types: {allowed}")
+
+
+def _declared_output_fields(config) -> dict[str, set[str]]:
+    """Declared field names per output section (entities/relations)."""
+    declared: dict[str, set[str]] = {}
+    output = config.output
+    for section in ("entities", "relations"):
+        fields = getattr(output, section, None)
+        if fields is not None and getattr(fields, "fields", None) is not None:
+            declared[section] = {f.name for f in fields.fields}
+    return declared
 
 
 class TemplateFactory:
@@ -183,6 +195,11 @@ class TemplateFactory:
         from hyperextract.types import AutoGraph
 
         entity_schema, relation_schema = parse_output(config.output, config.type)
+        validate_identifiers_fields(
+            config.identifiers,
+            config.type,
+            _declared_output_fields(config),
+        )
         identifiers = parse_identifiers(config.identifiers, config.type)
         entity_key_extractor, relation_key_extractor, entities_in_relation_extractor = (
             identifiers
@@ -223,6 +240,11 @@ class TemplateFactory:
         from hyperextract.types import AutoHypergraph
 
         entity_schema, relation_schema = parse_output(config.output, config.type)
+        validate_identifiers_fields(
+            config.identifiers,
+            config.type,
+            _declared_output_fields(config),
+        )
         identifiers = parse_identifiers(config.identifiers, config.type)
         entity_key_extractor, relation_key_extractor, entities_in_relation_extractor = (
             identifiers
@@ -262,6 +284,11 @@ class TemplateFactory:
         from hyperextract.types import AutoTemporalGraph
 
         entity_schema, relation_schema = parse_output(config.output, config.type)
+        validate_identifiers_fields(
+            config.identifiers,
+            config.type,
+            _declared_output_fields(config),
+        )
         (
             entity_key_extractor,
             relation_key_extractor,
@@ -306,6 +333,11 @@ class TemplateFactory:
         from hyperextract.types import AutoSpatialGraph
 
         entity_schema, relation_schema = parse_output(config.output, config.type)
+        validate_identifiers_fields(
+            config.identifiers,
+            config.type,
+            _declared_output_fields(config),
+        )
         identifiers = parse_identifiers(config.identifiers, config.type)
         (
             entity_key_extractor,
@@ -350,6 +382,11 @@ class TemplateFactory:
         from hyperextract.types import AutoSpatioTemporalGraph
 
         entity_schema, relation_schema = parse_output(config.output, config.type)
+        validate_identifiers_fields(
+            config.identifiers,
+            config.type,
+            _declared_output_fields(config),
+        )
         identifiers = parse_identifiers(config.identifiers, config.type)
         (
             entity_key_extractor,

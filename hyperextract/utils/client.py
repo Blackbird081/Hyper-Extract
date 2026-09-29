@@ -600,9 +600,21 @@ def get_client(
         >>> # Or with custom config path
         >>> llm, emb = get_client("/path/to/config.toml")
     """
+    import os
+
     from hyperextract.cli.config import ConfigManager
 
     path = Path(config_path) if config_path else DEFAULT_CONFIG_FILE
+    if not path.exists() and not os.getenv("OPENAI_API_KEY"):
+        raise FileNotFoundError(
+            f"No Hyper-Extract config found at {path}. Choose one:\n"
+            "  1. he config init -p openai -k YOUR_KEY\n"
+            "  2. Local models: he config llm -p vllm -u http://localhost:8000/v1 "
+            "-k dummy -m Qwen/Qwen3.5-9B (plus he config embedder -p vllm "
+            "-u http://localhost:8001/v1 -k dummy -m BAAI/bge-m3)\n"
+            "  3. Pass clients explicitly: Template.create(..., "
+            "llm_client=..., embedder=...)"
+        )
     manager = ConfigManager(path)
 
     llm_config = manager.get_llm_config()
